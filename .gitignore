@@ -1,0 +1,19 @@
+# ROS2 build
+build/
+install/
+log/
+
+# VSCode
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
