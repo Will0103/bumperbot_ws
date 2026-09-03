@@ -43,6 +43,41 @@ install(
   DESTINATION include
 )
 
+
+# componet
+add_library(simple_action_server SHARED src/simple_action_server.cpp)
+target_include_directories(simple_action_server PRIVATE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_compile_definitions(simple_action_server
+  PRIVATE "SIMPLE_ACTION_SERVER_CPP_BUILDING_DLL")
+ament_target_dependencies(simple_action_server
+  "bumperbot_msgs"
+  "rclcpp"
+  "rclcpp_action"
+  "rclcpp_components")
+rclcpp_components_register_node(simple_action_server 
+  PLUGIN "bumperbot_cpp_examples::SimpleActionServer" 
+  EXECUTABLE simple_action_server_node
+)
+
+add_library(simple_action_client SHARED src/simple_action_client.cpp)
+target_include_directories(simple_action_client PRIVATE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_compile_definitions(simple_action_client
+  PRIVATE "SIMPLE_ACTION_CLIENT_CPP_BUILDING_DLL")
+ament_target_dependencies(simple_action_client
+  "bumperbot_msgs"
+  "rclcpp"
+  "rclcpp_action"
+  "rclcpp_components")
+rclcpp_components_register_node(simple_action_client 
+  PLUGIN "bumperbot_cpp_examples::SimpleActionClient" 
+  EXECUTABLE simple_action_client_node
+)
+
+
 install(TARGETS
   simple_publisher
   simple_subscriber
@@ -53,5 +88,17 @@ install(TARGETS
   simple_service_client
   DESTINATION lib/${PROJECT_NAME}
 )
+
+
+# componet
+install(TARGETS
+  simple_action_server
+  simple_action_client
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+
 
 ament_package()

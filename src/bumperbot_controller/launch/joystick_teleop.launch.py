@@ -32,34 +32,34 @@ def generate_launch_description():
                     {"use_sim_time": LaunchConfiguration("use_sim_time")}]
     )
     
-    # twist_mux_launch = IncludeLaunchDescription(
-    #     os.path.join(
-    #         get_package_share_directory("twist_mux"),
-    #         "launch",
-    #         "twist_mux_launch.py"
-    #     ),
-    #     launch_arguments={
-    #         "cmd_vel_out": "bumperbot_controller/cmd_vel_unstamped",
-    #         "config_locks": os.path.join(bumperbot_controller_pkg, "config", "twist_mux_locks.yaml"),
-    #         "config_topics": os.path.join(bumperbot_controller_pkg, "config", "twist_mux_topics.yaml"),
-    #         "config_joy": os.path.join(bumperbot_controller_pkg, "config", "twist_mux_joy.yaml"),
-    #         "use_sim_time": LaunchConfiguration("use_sim_time"),
-    #     }.items(),
-    # )
+    twist_mux_launch = IncludeLaunchDescription(
+        os.path.join(
+            get_package_share_directory("twist_mux"),
+            "launch",
+            "twist_mux_launch.py"
+        ),
+        launch_arguments={
+            "cmd_vel_out": "bumperbot_controller/cmd_vel_unstamped",
+            "config_locks": os.path.join(bumperbot_controller_pkg, "config", "twist_mux_locks.yaml"),
+            "config_topics": os.path.join(bumperbot_controller_pkg, "config", "twist_mux_topics.yaml"),
+            "config_joy": os.path.join(bumperbot_controller_pkg, "config", "twist_mux_joy.yaml"),
+            "use_sim_time": LaunchConfiguration("use_sim_time"),
+        }.items(),
+    )
 
-    # twist_relay_node = Node(
-    #     package="bumperbot_controller",
-    #     executable="twist_relay",
-    #     name="twist_relay",
-    #     parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}]
-    # )
+    twist_relay_node = Node(
+        package="bumperbot_controller",
+        executable="twist_relay",
+        name="twist_relay",
+        parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}]
+    )
 
     return LaunchDescription(
         [
             use_sim_time_arg,
             joy_teleop,
             joy_node,
-            # twist_mux_launch,
-            # twist_relay_node,
+            twist_mux_launch,
+            twist_relay_node,
         ]
     )

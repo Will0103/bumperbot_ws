@@ -31,7 +31,9 @@ def generate_launch_description():
         ]
     )
 
+    # Add URDF folder (meshes)
     model_path = str(Path(bumperbot_description).parent.resolve())
+    # Add second folder (models)
     model_path += pathsep + os.path.join(get_package_share_directory("bumperbot_description"), 'models')
 
     gazebo_resource_path = SetEnvironmentVariable(
@@ -53,19 +55,19 @@ def generate_launch_description():
                      "use_sim_time": True}]
     )
 
-    # gazebo = IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource([os.path.join(
-    #                 get_package_share_directory("ros_gz_sim"), "launch"), "/gz_sim.launch.py"]),
-    #             launch_arguments={
-    #                 "gz_args": PythonExpression(["'", world_path, " -v 4 -r'"])
-    #             }.items()
-    #          )
-
     gazebo = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory("ros_gz_sim"), "launch"), "/gz_sim.launch.py"]),
-                 launch_arguments={"gz_args": "-v 4 -r empty.sdf"}.items(),
+                launch_arguments={
+                    "gz_args": PythonExpression(["'", world_path, " -v 4 -r'"])
+                }.items()
              )
+
+    # gazebo = IncludeLaunchDescription(
+    #             PythonLaunchDescriptionSource([os.path.join(
+    #                 get_package_share_directory("ros_gz_sim"), "launch"), "/gz_sim.launch.py"]),
+    #              launch_arguments={"gz_args": "-v 4 -r empty.sdf"}.items(),
+    #          )
 
     gz_spawn_entity = Node(
         package="ros_gz_sim",
@@ -81,7 +83,7 @@ def generate_launch_description():
         arguments=[
             "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
             "/imu@sensor_msgs/msg/Imu[gz.msgs.IMU",
-            # "/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan"
+            "/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan"
         ],
         remappings=[
             ('/imu', '/imu/out'),
