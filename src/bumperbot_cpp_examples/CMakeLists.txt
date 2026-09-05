@@ -36,6 +36,13 @@ add_executable(simple_service_server src/simple_service_server.cpp)
 ament_target_dependencies(simple_service_server rclcpp bumperbot_msgs)
 add_executable(simple_service_client src/simple_service_client.cpp)
 ament_target_dependencies(simple_service_client rclcpp bumperbot_msgs)
+add_executable(simple_lifecycle_node src/simple_lifecycle_node.cpp)
+ament_target_dependencies(simple_lifecycle_node rclcpp rclcpp_lifecycle std_msgs)
+add_executable(simple_qos_publisher src/simple_qos_publisher.cpp)
+ament_target_dependencies(simple_qos_publisher rclcpp std_msgs)
+
+add_executable(simple_qos_subscriber src/simple_qos_subscriber.cpp)
+ament_target_dependencies(simple_qos_subscriber rclcpp std_msgs)
 
 # for hpp
 install(
@@ -86,6 +93,9 @@ install(TARGETS
   simple_tf_kinematics
   simple_service_server
   simple_service_client
+  simple_lifecycle_node
+  simple_qos_publisher
+  simple_qos_subscriber
   DESTINATION lib/${PROJECT_NAME}
 )
 
