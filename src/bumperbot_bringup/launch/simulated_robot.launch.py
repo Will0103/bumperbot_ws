@@ -70,54 +70,54 @@ def generate_launch_description():
         output="screen"
     )
 
-    rviz_localization = Node(
-        package="rviz2",
-        executable="rviz2",
-        arguments=["-d", os.path.join(
-                get_package_share_directory("bumperbot_localization"),
-                "rviz",
-                "global_localization.rviz"
-            )
-        ],
-        output="screen",
-        parameters=[{"use_sim_time": True}],
-        condition=UnlessCondition(use_slam)
-    )
-
-    rviz_slam = Node(
-            package="rviz2",
-            executable="rviz2",
-            arguments=["-d", os.path.join(
-                    get_package_share_directory("bumperbot_mapping"),
-                    "rviz",
-                    "slam.rviz"
-                )
-            ],
-            output="screen",
-            parameters=[{"use_sim_time": True}],
-            condition=IfCondition(use_slam)
-        )
-
-    # navigation = IncludeLaunchDescription(
-    #     os.path.join(
-    #         get_package_share_directory("bumperbot_navigation"),
-    #         "launch",
-    #         "navigation.launch.py"
-    #     ),
-    # )
-
-    # rviz = Node(
+    # rviz_localization = Node(
     #     package="rviz2",
     #     executable="rviz2",
     #     arguments=["-d", os.path.join(
-    #             get_package_share_directory("nav2_bringup"),
+    #             get_package_share_directory("bumperbot_localization"),
     #             "rviz",
-    #             "nav2_default_view.rviz"
+    #             "global_localization.rviz"
     #         )
     #     ],
     #     output="screen",
-    #     parameters=[{"use_sim_time": True}]
+    #     parameters=[{"use_sim_time": True}],
+    #     condition=UnlessCondition(use_slam)
     # )
+
+    # rviz_slam = Node(
+    #         package="rviz2",
+    #         executable="rviz2",
+    #         arguments=["-d", os.path.join(
+    #                 get_package_share_directory("bumperbot_mapping"),
+    #                 "rviz",
+    #                 "slam.rviz"
+    #             )
+    #         ],
+    #         output="screen",
+    #         parameters=[{"use_sim_time": True}],
+    #         condition=IfCondition(use_slam)
+    #     )
+
+    navigation = IncludeLaunchDescription(
+        os.path.join(
+            get_package_share_directory("bumperbot_navigation"),
+            "launch",
+            "navigation.launch.py"
+        ),
+    )
+
+    rviz = Node(
+        package="rviz2",
+        executable="rviz2",
+        arguments=["-d", os.path.join(
+                get_package_share_directory("nav2_bringup"),
+                "rviz",
+                "nav2_default_view.rviz"
+            )
+        ],
+        output="screen",
+        parameters=[{"use_sim_time": True}]
+    )
     
     return LaunchDescription([
         use_slam_arg,
@@ -127,8 +127,8 @@ def generate_launch_description():
         localization,
         slam,
         safety_node,
-        rviz_localization,
-        rviz_slam,
-        # navigation,
-        # rviz,
+        # rviz_localization,
+        # rviz_slam,
+        navigation,
+        rviz,
     ])
