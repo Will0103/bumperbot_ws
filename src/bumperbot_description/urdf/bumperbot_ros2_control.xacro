@@ -2,12 +2,23 @@
 <robot name="bumperbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <ros2_control name="RobotSystem" type="system">
-        <hardware>
-            <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-        </hardware>
-
+        <!-- ros2_control Gazebo -->
+        <xacro:if value="$(arg is_sim)">
+            <hardware>
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+            </hardware>
+        </xacro:if>
+        <!-- ros2_control Real Robot -->
+        <xacro:unless value="$(arg is_sim)">
+            <hardware>
+                <plugin>bumperbot_firmware/BumperbotInterface</plugin>
+                <param name="port">/dev/ttyUSB0</param>
+            </hardware>
+        </xacro:unless>
+    
        
-        <!-- ros2_control Common Interfaces -->
+        <!-- ros2_control Common Interfaces --> 
+        <!-- decide the order!! -->
         <joint name="wheel_right_joint">
             <command_interface name="velocity">
               <param name="min">-1</param>

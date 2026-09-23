@@ -2,8 +2,8 @@
 
 <robot name="bumperbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
     
-    <xacro:arg name="is_ignition" default="true" />
-
+    <!-- Load Simulated or Real Hardware Interfaces -->
+    <xacro:arg name="is_sim" default="true"/>  
     <!-- Include Gazebo Parameters -->
     <xacro:include filename="bumperbot_gazebo.xacro"/>
     <!-- Ros2 Control -->
