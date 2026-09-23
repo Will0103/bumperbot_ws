@@ -126,6 +126,6 @@ def generate_launch_description():
             joint_state_broadcaster_spawner,
             simple_controller,
             wheel_controller_spawner,
-            noisy_controller_launch
+            # noisy_controller_launch
         ]
     )
