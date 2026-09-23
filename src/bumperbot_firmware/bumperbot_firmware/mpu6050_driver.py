@@ -54,10 +54,16 @@ class MPU6050_Driver(Node):
             
             # Full scale range +/- 250 degree/C as per sensitivity scale factor     
             ACCEL_SCALE = 1976.0
+            Z_ACCEL_BIAS = 1.402
+            Z_ACCEL_CORRECTION = 1.152
+            acc_x_ms2 = acc_x / ACCEL_SCALE
+            acc_y_ms2 = acc_y / ACCEL_SCALE
+            acc_z_ms2 = acc_z / ACCEL_SCALE
+            self.imu_msg_.linear_acceleration.x = acc_x_ms2
+            self.imu_msg_.linear_acceleration.y = acc_y_ms2
+            self.imu_msg_.linear_acceleration.z = (acc_z_ms2 - Z_ACCEL_BIAS) * Z_ACCEL_CORRECTION
+
             GYRO_SCALE = 7509.55
-            self.imu_msg_.linear_acceleration.x = acc_x / ACCEL_SCALE
-            self.imu_msg_.linear_acceleration.y = acc_y / ACCEL_SCALE
-            self.imu_msg_.linear_acceleration.z = acc_z / ACCEL_SCALE
             self.imu_msg_.angular_velocity.x = gyro_x / GYRO_SCALE
             self.imu_msg_.angular_velocity.y = gyro_y / GYRO_SCALE
             self.imu_msg_.angular_velocity.z = gyro_z / GYRO_SCALE
