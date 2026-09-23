@@ -18,6 +18,7 @@ GYRO_XOUT_H  = 0x43
 GYRO_YOUT_H  = 0x45
 GYRO_ZOUT_H  = 0x47
 DEVICE_ADDRESS = 0x68
+ACCEL_CONFIG = 0x1C
 
 
 class MPU6050_Driver(Node):
@@ -52,12 +53,14 @@ class MPU6050_Driver(Node):
             gyro_z = self.read_raw_data(GYRO_ZOUT_H)
             
             # Full scale range +/- 250 degree/C as per sensitivity scale factor     
-            self.imu_msg_.linear_acceleration.x = acc_x / 1670.13
-            self.imu_msg_.linear_acceleration.y = acc_y / 1670.13
-            self.imu_msg_.linear_acceleration.z = acc_z / 1670.13
-            self.imu_msg_.angular_velocity.x = gyro_x / 7509.55
-            self.imu_msg_.angular_velocity.y = gyro_y / 7509.55
-            self.imu_msg_.angular_velocity.z = gyro_z / 7509.55
+            ACCEL_SCALE = 1976.0
+            GYRO_SCALE = 7509.55
+            self.imu_msg_.linear_acceleration.x = acc_x / ACCEL_SCALE
+            self.imu_msg_.linear_acceleration.y = acc_y / ACCEL_SCALE
+            self.imu_msg_.linear_acceleration.z = acc_z / ACCEL_SCALE
+            self.imu_msg_.angular_velocity.x = gyro_x / GYRO_SCALE
+            self.imu_msg_.angular_velocity.y = gyro_y / GYRO_SCALE
+            self.imu_msg_.angular_velocity.z = gyro_z / GYRO_SCALE
 
             self.imu_msg_.header.stamp = self.get_clock().now().to_msg()
             self.imu_pub_.publish(self.imu_msg_)
@@ -71,7 +74,9 @@ class MPU6050_Driver(Node):
             self.bus_.write_byte_data(DEVICE_ADDRESS, PWR_MGMT_1, 1)
             self.bus_.write_byte_data(DEVICE_ADDRESS, CONFIG, 0)
             self.bus_.write_byte_data(DEVICE_ADDRESS, GYRO_CONFIG, 24)
+            self.bus_.write_byte_data(DEVICE_ADDRESS, ACCEL_CONFIG, 0)
             self.bus_.write_byte_data(DEVICE_ADDRESS, INT_ENABLE, 1)
+            
             self.is_connected_ = True
         except OSError:
             self.is_connected_ = False
