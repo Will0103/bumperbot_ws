@@ -62,10 +62,11 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(right_encoder_phaseA),rightEncoderCallback,RISING);
   attachInterrupt(digitalPinToInterrupt(left_encoder_phaseA),leftEncoderCallback,RISING);
 
-  digitalWrite(L298N_in1, HIGH);
-  digitalWrite(L298N_in2, LOW);
-  digitalWrite(L298N_in3, HIGH);
-  digitalWrite(L298N_in4, LOW);
+  digitalWrite(L298N_in1, LOW);
+  digitalWrite(L298N_in2, HIGH);
+  digitalWrite(L298N_in3, LOW);
+  digitalWrite(L298N_in4, HIGH);
+  
 
   rightMotor.SetMode(AUTOMATIC); //PID 自己根據 Input / Setpoint 計算 Output
   leftMotor.SetMode(AUTOMATIC);
@@ -153,13 +154,13 @@ void loop()
   
   // 每 100 ms 統計一次，所以 *10 轉成 pulse/sec
   // 11 pulse / motor rev
-  // gearbox ratio = 35
+  // gearbox ratio = 35.5
   // 0.10472 = RPM -> rad/s
   unsigned long current_millis = millis();
   if(current_millis - last_millis >= interval)
   {
-    right_wheel_meas_vel = 10.0 * right_encoder_counter * (60.0 / (11.0 * 35.0)) * 0.10472;
-    left_wheel_meas_vel = 10.0 * left_encoder_counter * (60.0 / (11.0 * 35.0)) * 0.10472;
+    right_wheel_meas_vel = 10.0 * right_encoder_counter * (60.0 / (11.0 * 35.5)) * 0.10472;
+    left_wheel_meas_vel = 10.0 * left_encoder_counter * (60.0 / (11.0 * 35.5)) * 0.10472;
 
     rightMotor.Compute();
     leftMotor.Compute();
@@ -190,11 +191,11 @@ void rightEncoderCallback()
 
   if (digitalRead(right_encoder_phaseB) == HIGH)
   {
-    right_encoder_sign = "p";
+    right_encoder_sign = "n";
   }
   else
   {
-    right_encoder_sign = "n";
+    right_encoder_sign = "p";
   }
 }
 
@@ -204,10 +205,10 @@ void leftEncoderCallback()
 
   if (digitalRead(left_encoder_phaseB) == HIGH)
   {
-    left_encoder_sign = "n";  //opposite rotational direction 
+    left_encoder_sign = "p";  //opposite rotational direction 
   }
   else
   {
-    left_encoder_sign = "p";
+    left_encoder_sign = "n";
   }
 }
